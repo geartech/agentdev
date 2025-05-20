@@ -1,0 +1,35 @@
+- Utilize as anotações padrão: `@AuditEntity`, `@SequenceGenerator`, `@GeneratedValue`, `@Enumerated`, entre outras.  
+- As classes devem seguir a estrutura do exemplo abaixo, mantendo a organização dos pacotes e os mesmos padrões de nomenclatura.  
+- Inclua obrigatoriamente todos os imports necessários no início da classe Java gerada (como javax.persistence.*, java.io.Serializable, e imports específicos do projeto fornecido).
+- Se houver um atributo do tipo enum crie a classe Enum solicitada. 
+- Crie um método dto que retorne um Dados<Entidade>, crie a classe necessária `Dados<Entidade>`.
+- Após criar o DTO e, se necessário, o Enum, insira obrigatoriamente os imports correspondentes na classe ENTITY.
+- Se houver uso de Enum no DTO, inclua também o import correspondente na classe DTO.
+- Retorne o resuiltado no seguinte formato JSON:  
+    [{'tipo': 'ENTITY', 'codigoJava': '...'}, {'tipo': 'ENUM', 'codigoJava': '...'}, {'tipo': 'DTO', 'codigoJava': '...'}].  
+- O DTO 'Dados<Entidade>' deve ser retornado por um método específico getDados() na entidade.  
+- Crie apenas a entidade e o dto.
+- Somente crie o Enum se for mencionado ou solicitado.
+- Retorne apenas o JSON gerado, sem explicações ou comentários, nem antes nem depois.
+- Regras importantes para a geração do código:
+	1. O JSON gerado deve ser **válido e bem formatado**, sem erros de sintaxe.
+	2. **Aspas duplas (`"`)** devem ser usadas para nomes de tabelas, colunas e anotações no código Java.
+	4. **Quebras de linha** devem ser representadas por `\n` no JSON para manter a formatação correta.
+	  
+**Exemplo de estrutura esperada:**
+[
+  {
+    "tipo": "ENTITY",
+    "codigoJava": "import javax.persistence.Basic;\nimport javax.persistence.Column;\nimport javax.persistence.Entity;\nimport javax.persistence.EnumType;\nimport javax.persistence.Enumerated;\nimport javax.persistence.GeneratedValue;\nimport javax.persistence.GenerationType;\nimport javax.persistence.Id;\nimport javax.persistence.SequenceGenerator;\nimport javax.persistence.Table;\n\nimport <pacoteDoDto>.DadosParametro;\nimport <pacoteDoEnum>.TipoParametro;\nimport com.arcelormittal.amsapi.audit.AuditEntity;\n\n@Entity\n@Table(name = \"PARAMETRO\")\n@org.hibernate.annotations.DynamicUpdate(true)\n@org.hibernate.annotations.DynamicInsert(true)\n@AuditEntity\npublic class Parametro extends EntidadeBase {\n\n    private static final long serialVersionUID = 1L;\n\n    @Id\n    @SequenceGenerator(name = \"SEQ_PARAMETRO\", sequenceName = \"SEQ_PARAMETRO\", allocationSize = 1)\n    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = \"SEQ_PARAMETRO\")\n    @Basic(optional = false)\n    @Column(name = \"ID\", nullable = false, precision = 38, scale = 0)\n    private Long id;\n\n    @Column(name = \"NOME\", nullable = false, length = 100)\n    private String nome;\n\n    @Column(name = \"VALOR\", nullable = false, length = 400)\n    private String valor;\n\n    @Column(name = \"DESCRICAO\", nullable = false, length = 200)\n    private String descricao;\n\n    @Column(name = \"TIPOPARAMETRO\", nullable = false, length = 10)\n    @Enumerated(EnumType.STRING)\n    private TipoParametro tipoParametro;\n\n    public Long getId() {\n        return id;\n    }\n\n    public void setId(Long id) {\n        this.id = id;\n    }\n\n    public String getNome() {\n        return nome;\n    }\n\n    public void setNome(String nome) {\n        this.nome = nome;\n    }\n\n    public String getValor() {\n        return valor;\n    }\n\n    public void setValor(String valor) {\n        this.valor = valor;\n    }\n\n    public String getDescricao() {\n        return descricao;\n    }\n\n    public void setDescricao(String descricao) {\n        this.descricao = descricao;\n    }\n\n    public TipoParametro getTipoParametro() {\n        return tipoParametro;\n    }\n\n    public void setTipoParametro(TipoParametro tipoParametro) {\n        this.tipoParametro = tipoParametro;\n    }\n\n    @Override\n    public Class<Parametro> getClasseEntidade() {\n        return Parametro.class;\n    }\n\n    public DadosParametro getDados() {\n        return new DadosParametro(id, nome, valor, descricao, tipoParametro);\n    }\n}"
+  },
+  {
+    "tipo": "ENUM",
+    "codigoJava": "public enum TipoParametro {\n    FLAG, HORA, INTEIRO, NUMERICO, TEXTO\n}"
+  },
+  {
+    "tipo": "DTO",
+    "codigoJava": "import java.io.Serializable;\nimport <pacoteEnum>.TipoParametro;\n\npublic class DadosParametro implements Serializable {\n    private static final long serialVersionUID = 1L;\n\n    private Long id;\n    private String nome;\n    private String valor;\n    private String descricao;\n    private TipoParametro tipoParametro;\n\n    public DadosParametro() {\n        super();\n    }\n\n    public DadosParametro(Long id, String nome, String valor, String descricao, TipoParametro tipoParametro) {\n        this.id = id;\n        this.nome = nome;\n        this.valor = valor;\n        this.descricao = descricao;\n        this.tipoParametro = tipoParametro;\n    }\n\n    public Long getId() {\n        return id;\n    }\n\n    public String getNome() {\n        return nome;\n    }\n\n    public String getValor() {\n        return valor;\n    }\n\n    public String getDescricao() {\n        return descricao;\n    }\n\n    public TipoParametro getTipoParametro() {\n        return tipoParametro;\n    }\n}"
+  }
+]
+**Sempre siga essa estrutura exata ao gerar novas classes.**
+**A resposta deve conter apenas o JSON gerado, sem comentários ou qualquer texto adicional antes ou depois.**

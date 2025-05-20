@@ -1,0 +1,13 @@
+{
+    "path": "D:\\DEVELOPER\\GIT\\app\\src\\main\\java\\agent\\java",
+    "nomeProjeto": "agent.java",
+    "entity": "service\\model",
+    "repository": "service\\repositories",
+    "service": "service\\impl",
+    "mapper": "service\\mapper",
+    "mapperXML": "mybatis\\mapper",
+    "dto": "common\\dtos",
+    "exceptions": "common\\exceptions",
+    "enumerator": "common\\enums",
+    "controller": "client\\web\\controllers"
+}

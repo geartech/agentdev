@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.com.agentdev</groupId>
+	<artifactId>agentdev</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Projeto terminal</name>
+  
+	<properties>
+	  <maven.compiler.source>17</maven.compiler.source>
+	  <maven.compiler.target>17</maven.compiler.target>
+	  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+	  <!-- JUnit opcional para testes -->
+	  <dependency>
+	    <groupId>junit</groupId>
+	    <artifactId>junit</artifactId>
+	    <version>4.13.2</version>
+	    <scope>test</scope>
+	  </dependency>
+	  
+	  <dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.18.3</version>
+	  </dependency>
+	
+  	  <dependency>
+		<groupId>commons-io</groupId>
+		<artifactId>commons-io</artifactId>
+		<version>2.15.1</version>
+      </dependency>
+    
+      <dependency>
+	    <groupId>org.eclipse.jgit</groupId>
+	    <artifactId>org.eclipse.jgit</artifactId>
+	    <version>6.9.0.202403050737-r</version>
+	  </dependency>
+
+	</dependencies>
+
+	<build>
+	  <plugins>
+	    <plugin>
+	      <groupId>org.codehaus.mojo</groupId>
+	      <artifactId>exec-maven-plugin</artifactId>
+	      <version>3.1.0</version>
+	      <configuration>
+	        <mainClass>com.exemplo.app.App</mainClass>
+	      </configuration>
+	    </plugin>
+	  </plugins>
+	</build>
+
+</project>

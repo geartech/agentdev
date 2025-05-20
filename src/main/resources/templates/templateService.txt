@@ -1,0 +1,34 @@
+Com base na entidade e repositorio Java fornecida abaixo, gere apenas as classes Java correspondentes ao SERVICE e as EXCEPTIONS, seguindo rigorosamente o padrão fornecido:
+--- ENTIDADE ---
+%s
+--- REPOSITORY ---
+%d
+### Instruções para geração:
+
+- Retorne o resuiltado no seguinte formato JSON:  
+    [{'tipo': 'SERVICE', 'codigoJava': '...'}, {'tipo': 'EXCEPTIONS', 'codigoJava': ['...']}].
+  
+- Crie apenas o service e os exceptions.
+- Retorne apenas o JSON gerado, sem explicações ou comentários, nem antes nem depois.
+- Regras importantes para a geração do código:
+	1. O JSON gerado deve ser **válido e bem formatado**, sem erros de sintaxe.
+	2. **Aspas duplas (`"`)** devem ser usadas para nomes de tabelas, colunas e anotações no código Java.
+	4. **Quebras de linha** devem ser representadas por `\n` no JSON para manter a formatação correta.
+	  
+**Exemplo de estrutura esperada:**
+[
+  {
+    "tipo": "SERVICE",
+    "codigoJava": "package <pacoteProjeto>.service.impl.parametro;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Service;\nimport org.springframework.transaction.annotation.Transactional;\n\nimport com.arcelormittal.amsapi.audit.AuditSession;\nimport com.arcelormittal.amsapi.model.ParametroJaExistenteException;\n\nimport <pacoteDTO>.common.dtos.DadosParametroDTO;\nimport <pacoteEnum>.common.enums.TipoParametro;\nimport <pacoteException>.common.exceptions.ParametroJaExistenteException;\nimport <pacoteException>.common.exceptions.ParametroNaoExistenteException;\nimport <pacoteProjetoUser>;\nimport <pacoteProjeto>.service.model.Parametro;\nimport <pacoteProjeto>.service.repositories.parametro.ParametroRepository;\n\n@Service\n@Transactional(rollbackFor = Throwable.class)\npublic class ParametroService {\n\n\t@Autowired\n\tprotected ParametroRepository parametroRepository;\n\t\n\t@Autowired\n\t\n\tpublic DadosParametroDTO recuperar(?User user, Long id) throws ParametroNaoExistenteException {\n\t\tParametro parametro = parametroRepository.findById(id)\n\t\t\t\t.orElseThrow(() -> new ParametroNaoExistenteException(id));\n\t\treturn parametro.getDados();\n\t}\n\t\n\t@AuditSession\n\tpublic DadosParametroDTO salvar(?User user, Long id, String nome, String valor, String descricao, TipoParametro tipoParametro) \n\t\t\tthrows ParametroJaExistenteException {\n\t\t\n\t\tnome = nome.toUpperCase().trim();\n\t\t\n\t\tverificaDuplicidade(user, id, nome);\n\t\t\n\t\tParametro parametro = id != null ? parametroRepository.findById(id).orElse(null) : null;\n\t\tif (parametro == null) {\n\t\t\ttry {\n\t\t\t\tparametro = parametroRepository.criar(user.getCentro(), nome, valor, descricao, tipoParametro);\n\t\t\t} catch (ParametroJaExistenteException e) {\n\t\t\t\tthrow new ParametroJaExistenteException(nome);\n\t\t\t}\n\t\t} else {\n\t\t\tparametro.setNome(nome);\n\t\t\tparametro.setValor(valor);\n\t\t\tparametro.setDescricao(descricao);\n\t\t\tparametro.setTipoParametro(tipoParametro);\n\t\t}\n\t\t\n\t\treturn parametro.getDados();\n\t}\n\t\n\tprivate void verificaDuplicidade(?User user, Long id, String nome) throws ParametroJaExistenteException {\n\t\tParametro parametroNomeJaExistente = parametroRepository.findByCentroAndNome(user.getCentro(), nome).orElse(null);\t\t\n\t\tif (parametroNomeJaExistente != null && !parametroNomeJaExistente.getId().equals(id)) {\n\t\t\tthrow new ParametroJaExistenteException(nome);\t\n\t\t}\n\t}\n\n\t@AuditSession\n\tpublic void excluir(?User user, Long id) throws ParametroNaoExistenteException {\n\t\tParametro parametro = parametroRepository.findById(id).orElseThrow(() -> new ParametroNaoExistenteException(id));\n\t\t\n\t\tparametroRepository.delete(parametro);\n\t\tparametroRepository.flush();\n\t}\n\n}"
+  }
+
+  {
+    "tipo": "EXCEPTIONS",
+    "codigoJava": [
+    				"package <pacoteProjeto>.common.exceptions;\n\nimport com.arcelormittal.amsapi.common.APIException;\n\n@APIException(\"PARAMETRO_JA_EXISTENTE\")\npublic class ParametroJaExistenteException extends Exception {\n\n\tprivate static final long serialVersionUID = 1L;\n\t\n\tprivate String nome;\n\n\tpublic ParametroJaExistenteException(String nome) {\n\t\tsuper();\n\t\tthis.nome = nome;\n\t}\n\n\tpublic String getNome() {\n\t\treturn nome;\n\t}\n\t\n}",
+    				"package <pacoteProjeto>.common.exceptions;\n\nimport com.arcelormittal.amsapi.common.APIException;\n\n@APIException(\"PARAMETRO_NAO_EXISTENTE\")\npublic class ParametroNaoExistenteException extends Exception {\n\t\n\tprivate static final long serialVersionUID = 1L;\n\n\tprivate Long id;\n\n\tpublic ParametroNaoExistenteException(Long id) {\n\t\tsuper();\n\t\tthis.id = id;\n\t}\n\n\tpublic Long getId() {\n\t\treturn id;\n\t}\n\t\n}"
+    			  ]
+  }
+]
+**Sempre siga essa estrutura exata ao gerar novas classes java.**
+**A resposta deve conter apenas o JSON gerado, sem comentários ou qualquer texto adicional antes ou depois.**
